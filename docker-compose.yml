@@ -1,0 +1,63 @@
+version: "3"
+
+volumes:
+  pg_data:
+  pg_admin_data:
+  
+services:
+  db:
+    container_name: ${POSTGRESQL_CONTAINER_NAME}
+    build:
+      context: postgresql/
+    networks:
+      - dbnet
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - MAIN_DB_USER
+      - MAIN_DB_PASSWORD
+      - MAIN_DB
+      - DATASTORE_READONLY_USER
+      - DATASTORE_READONLY_PASSWORD
+      - DATASTORE_DB
+      - MAIN_TEST_DB
+      - DATASTORE_TEST_DB
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+
+  pgadmin:
+    container_name: ${PGADMIN_CONTAINER_NAME}
+    build:
+      context: pgadmin/
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - webnet
+      - dbnet
+    volumes:
+      - pg_admin_data:/var/lib/pgadmin/
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:${PGADMIN_PORT_HOST}:${PGADMIN_PORT}"
+
+networks:
+  webnet:
+  dbnet:
+    internal: true
