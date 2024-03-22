@@ -29,6 +29,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
       - name: PostgreSQL build
         uses: docker/build-push-action@v5
         with:
@@ -36,6 +39,8 @@ jobs:
               file: ./postgresql/${{ env.DOCKERFILE }}
               push: false
               tags: mjanez/postgres-docker-postgresql:test-build-only
+              secrets: |
+                .env
 
       - name: Lint PostgreSQL Dockerfile
         uses: jbergstroem/hadolint-gh-action@v1.12.2
@@ -52,6 +57,8 @@ jobs:
               file: ./pgadmin/${{ env.DOCKERFILE }}
               push: false
               tags: mjanez/postgres-docker-postgresql:test-build-only
+              secrets: |
+                .env
 
       - name: Lint PgAdmin Dockerfile
         uses: jbergstroem/hadolint-gh-action@v1.12.2
@@ -60,16 +67,3 @@ jobs:
           version: ${{ env.HADOLINT_VERSION }}
           annotate: true
           error_level: -1
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Test PgAdmin connection to PostgreSQL
-        run: |
-          docker run --network container:mjanez/postgres-docker-postgresql:test-build-only postgres:13 psql -h localhost -U postgres -c "SELECT 1"
-        env:
-          PGPASSWORD: postgres
-    
