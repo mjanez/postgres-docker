@@ -15,6 +15,7 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
+      - DATABASES_TO_CHECK
       - MAIN_DB_USER
       - MAIN_DB_PASSWORD
       - MAIN_DB
