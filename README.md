@@ -150,6 +150,7 @@ The cronjob is now set up and will backup your CKAN PostgreSQL database daily at
 
 
 #### Restore a backup
+##### From pg_dump
 If need to use a backup of `maindb` in a new deployment, you can restore it using the following steps:
 
 > [!WARNING]
@@ -160,6 +161,25 @@ If need to use a backup of `maindb` in a new deployment, you can restore it usin
     ```bash
     docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME pg_restore -U $POSTGRES_USER --clean --if-exists -d $MAIN_DB < /path/to/your/backup/directory/maindb.dump
     ```
+
+##### From .sql file
+Restoring a PostgreSQL database from a `.sql` file involves executing the SQL commands in the file on a PostgreSQL database. This is typically done using the `psql` command-line utility, which is a terminal-based front-end to PostgreSQL. 
+
+Here's how you can do it:
+
+    ```bash
+    # Create users and db if not exists
+    docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME OWNER $DATABASE_OWNER;"
+
+    # Restore with pg_restore
+    docker exec -i $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -d $DATABASE_NAME < /path/to/your/backup/directory/database.sql
+    ```
+
+This command will restore the database `$DATABASE_NAME` from the `database.sql` file in the container `$POSTGRESQL_CONTAINER_NAME`. Replace `$POSTGRESQL_CONTAINER_NAME`, `$POSTGRES_USER`, `$DATABASE_NAME`, and `/path/to/your/backup/directory/database.sql` with your actual values.
+
+If the `database.sql` file is on your local machine and not in the container, you'll need to copy it to the container first or mount it as a volume.
+
+Please note that the `.sql` file should contain valid SQL commands. If the file was created using `pg_dump` with a format other than plain text, you'll need to use `pg_restore` instead of `psql` to restore the database.
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request.

@@ -9,7 +9,7 @@ services:
     container_name: ${POSTGRESQL_CONTAINER_NAME}
     build:
       context: postgresql/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.postgis
     networks:
       - dbnet
     environment:
@@ -27,6 +27,7 @@ services:
       - DATASTORE_TEST_DB
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./data:/tmp/backups
     logging:
       driver: "json-file"
       options:
@@ -50,6 +51,7 @@ services:
       - dbnet
     volumes:
       - pg_admin_data:/var/lib/pgadmin/
+      - ./data:/tmp/backups
     logging:
       driver: "json-file"
       options:
