@@ -167,13 +167,13 @@ Restoring a PostgreSQL database from a `.sql` file involves executing the SQL co
 
 Here's how you can do it:
 
-    ```bash
-    # Create users and db if not exists
-    docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME OWNER $DATABASE_OWNER;"
+```bash
+# Create users and db if not exists. e.g. to create a db:
+docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME OWNER $DATABASE_OWNER;"
 
-    # Restore with pg_restore
-    docker exec -i $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -d $DATABASE_NAME < /path/to/your/backup/directory/database.sql
-    ```
+# Restore with pg_restore
+docker exec -i $POSTGRESQL_CONTAINER_NAME psql -U $POSTGRES_USER -d $DATABASE_NAME < /path/to/your/backup/directory/database.sql
+```
 
 This command will restore the database `$DATABASE_NAME` from the `database.sql` file in the container `$POSTGRESQL_CONTAINER_NAME`. Replace `$POSTGRESQL_CONTAINER_NAME`, `$POSTGRES_USER`, `$DATABASE_NAME`, and `/path/to/your/backup/directory/database.sql` with your actual values.
 
