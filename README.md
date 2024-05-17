@@ -80,6 +80,17 @@ docker exec -it {POSTGRESQL_CONTAINER_NAME} psql -U {POSTGRES_USER} -d {POSTGRES
 ### Backups
 PostgreSQL offers the command line tools [`pg_dump`](https://www.postgresql.org/docs/current/static/app-pgdump.html) and [`pg_restore`](https://www.postgresql.org/docs/current/static/app-pgrestore.html) for dumping and restoring a database and its content to/from a file.
 
+#### Backup Data and DDL
+DDL Schema:
+```bash
+docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $CONTAINER_NAME pg_dump -U $POSTGRES_USER --schema-only DATABASE > schema.sql
+```
+
+Dump backup
+```bash
+docker exec -i -e PGPASSWORD=$POSTGRES_PASSWORD $CONTAINER_NAME pg_dump -U $POSTGRES_USER -Fc $DATABASE_NAME > ckan_backup.dump
+```
+
 #### Backup service for db container
 1. Create a new file called `maindb_backup_custom.sh` and open it in your preferred text editor.
 
@@ -159,7 +170,7 @@ If need to use a backup of `maindb` in a new deployment, you can restore it usin
 1. Import a previously created dump.
 
     ```bash
-    docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME pg_restore -U $POSTGRES_USER --clean --if-exists -d $MAIN_DB < /path/to/your/backup/directory/maindb.dump
+    docker exec -i -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME pg_restore -U $POSTGRES_USER --clean --if-exists -d $DATABASE_NAME < /path/to/your/backup/directory/ckan.dump
     ```
 
 ##### From .sql file
