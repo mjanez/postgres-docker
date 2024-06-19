@@ -26,9 +26,13 @@ services:
       - DATASTORE_DB
       - MAIN_TEST_DB
       - DATASTORE_TEST_DB
+      - POSTGRES_PORT
+      - POSTGRES_PORT_HOST
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./data:/var/lib/pgadmin/storage/${PGADMIN_DEFAULT_EMAIL_FOLDER}/data
+    ports:
+      - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT}"
     logging:
       driver: "json-file"
       options:
