@@ -5,7 +5,9 @@ This repository provides a simple and customizable setup for deploying PostgreSQ
 - [**PostgreSQL**](https://www.postgresql.org/): The world's most advanced open-source relational database. This setup uses the alpine version for a smaller footprint.
 - [**PgAdmin**](https://www.pgadmin.org/): A popular open-source and full-featured PostgreSQL administration tool. This setup allows you to manage your databases through a web interface.
 - [**Docker Compose**](https://docs.docker.com/compose/): Easy deployment with a single command. Docker Compose also allows you to manage your application's services.
-- **Multiple Databases**: This setup supports multiple databases, making it suitable for complex applications.
+- **Multiple deployments**: This setup supports databases for multiple projects and integrations, making it suitable for complex applications. Available integrations include:
+  - [CKAN](https://docs.ckan.org/en/latest/) with: .`env.ckan.example`
+  - [PostGIS](https://postgis.net/documentation/)
 - **Environment Variables**: Customize your setup easily using environment variables. An example file ([`.env.example`](.env.example)) is provided to get you started.
 
 ## Getting Started
@@ -125,9 +127,9 @@ docker exec -i -e PGPASSWORD=$POSTGRES_PASSWORD $CONTAINER_NAME pg_dump -U $POST
 
 3. Replace the following placeholders with your values from the `.env` file.
 
-    > [!WARNING]
-    > If you have changed the values of the PostgreSQL container, database or user, change them too.
-    > Check that `zip` package is installed, eg: `sudo apt-get install zip`
+> [!WARNING]
+> If you have changed the values of the PostgreSQL container, database or user, change them too.
+> Check that `zip` package is installed, eg: `sudo apt-get install zip`
 
 4. Save and close the file.
 
@@ -149,8 +151,8 @@ docker exec -i -e PGPASSWORD=$POSTGRES_PASSWORD $CONTAINER_NAME pg_dump -U $POST
     0 0 * * * /path/to/your/script/maindb_backup_custom.sh
     ```
 
-    > [!NOTE]
-    > Replace `/path/to/your/script` with the actual path to the `maindb_backup_custom.sh` script.
+> [!NOTE]
+> Replace `/path/to/your/script` with the actual path to the `maindb_backup_custom.sh` script.
   
 8. Save and close the file.
 
