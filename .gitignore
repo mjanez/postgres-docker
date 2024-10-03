@@ -1,5 +1,10 @@
 # Environment
-.env
 .vscode
 .vagrant
 data
+
+# Ennvars
+.env.old
+.env
+.env.*
+!.env.*.example

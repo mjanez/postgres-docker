@@ -1,0 +1,4 @@
+FROM postgres:15-alpine
+
+# Include extra setup scripts (eg datastore)
+COPY --chown=postgres:postgres docker-entrypoint-ckandb.d /docker-entrypoint-initdb.d
